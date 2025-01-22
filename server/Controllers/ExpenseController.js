@@ -56,4 +56,26 @@ export const fetchExpenses = async (req, res) => {
     });
   }
 };
-export const deleteExpenses = (req, res) => {};
+
+export const deleteExpenses = async (req, res) => {
+  const { userId } = req.user;
+  const expenseId = req.params.expenseId;
+  try {
+    const userData = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { expenses: { _id: expenseId } } },
+      { new: true } // For Returning the updated documents
+    );
+    res.status(200).json({
+      message: "Expense Deleted successfully",
+      success: true,
+      data: userData?.expenses,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Something went wrong",
+      error: err,
+      success: false,
+    });
+  }
+};
