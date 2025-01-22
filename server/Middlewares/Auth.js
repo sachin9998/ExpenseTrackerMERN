@@ -13,7 +13,7 @@ export const verifyJWT = async (req, res, next) => {
     const decodedData = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decodedData;
 
-    // console.log("decodedData", decodedData);
+    console.log("decodedData", decodedData);
 
     next();
   } catch (error) {
